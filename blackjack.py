@@ -13,7 +13,7 @@ def print_game_state(player_hand, dealer_hand):
 
 def take_more():
     while True:
-        action = input("\nDo you want to take (t) or stay (s)? ")
+        action = input("\nYour turn Do you want to take (t) or stay (s)? ")
         if action == "t":
             return True
         elif action == "s":
