@@ -3,23 +3,22 @@ class Hand:
     def __init__(self):
         self.cards = []
 
-    '''
-    Returns the BlackJack sums for the hand, 
-    where aces are counted as 1. 
-    '''
     def simple_sum(self):
-        sum = 0
+        '''
+        Returns the BlackJack sums for the hand, 
+        where aces are counted as 1.
+        '''
+        hand_sum = 0
         for card in self.cards:
-            sum += card.black_jack_value()
+            hand_sum += card.black_jack_value()
 
-        return sum
+        return hand_sum
 
-    '''
-    Returns a list of the possible BlackJack sums for the hand, 
-    taking into account that an ace can either be 1 or 11. 
-    '''
-    def sums(self):
-        
+    def hand_sums(self):
+        '''
+        Returns a list of the possible BlackJack sums for the hand, 
+        taking into account that an ace can either be 1 or 11. 
+        '''
         sums = [self.simple_sum()]
 
         for card in self.cards:
@@ -28,16 +27,16 @@ class Hand:
 
         return sums
 
-    '''
-    Returns the highest possible sum of the hand that is not bust (<=21),
-    or the lowest busted sum
-    '''
-    def sum(self):
-        for sum in self.sums()[::-1]:
-            if sum <= 21:
-                return sum
-        else:
-            return sum
+    def hand_sum(self):
+        '''
+        Returns the highest possible sum of the hand that is not bust (<=21),
+        or the lowest busted sum
+        '''
+        for hand_sum in self.hand_sums()[::-1]:
+            if hand_sum <= 21:
+                return hand_sum
+        
+        return hand_sum
 
 
     def take(self, card):
@@ -48,6 +47,6 @@ class Hand:
         for card in self.cards:
             result += f"{card}\n"
 
-        result += f"Sum {self.sum()}"
+        result += f"Sum {self.hand_sum()}"
         
         return result

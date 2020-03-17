@@ -8,7 +8,7 @@ class TestHand(unittest.TestCase):
         hand = Hand()
         hand.take(Card(2, "spades"))
 
-        result = hand.sum()
+        result = hand.hand_sum()
 
         self.assertEqual(result, 2)
 
@@ -17,7 +17,7 @@ class TestHand(unittest.TestCase):
         hand.take(Card(1, "spades"))
         hand.take(Card(11, "spades"))
 
-        result = hand.sum()
+        result = hand.hand_sum()
 
         self.assertEqual(result, 21)
 
@@ -26,7 +26,7 @@ class TestHand(unittest.TestCase):
         hand.take(Card(11, "spades"))
         hand.take(Card(13, "spades"))
 
-        result = hand.sum()
+        result = hand.hand_sum()
 
         self.assertEqual(result, 20)
 
@@ -36,7 +36,7 @@ class TestHand(unittest.TestCase):
         hand.take(Card(13, "spades"))
         hand.take(Card(1, "spades"))
 
-        result = hand.sum()
+        result = hand.hand_sum()
 
         self.assertEqual(result, 21)
 
@@ -47,7 +47,7 @@ class TestHand(unittest.TestCase):
         hand.take(Card(13, "spades"))
         hand.take(Card(1, "spades"))
 
-        result = hand.sum()
+        result = hand.hand_sum()
 
         self.assertEqual(result, 31)
 
@@ -57,7 +57,7 @@ class TestHand(unittest.TestCase):
         hand.take(Card(1, "spades"))
         hand.take(Card(1, "hearts"))
 
-        result = hand.sum()
+        result = hand.hand_sum()
 
         self.assertEqual(result, 12)
 
@@ -69,7 +69,7 @@ class TestHand(unittest.TestCase):
         hand.take(Card(1, "hearts"))
         hand.take(Card(1, "diamonds"))
 
-        result = hand.sum()
+        result = hand.hand_sum()
 
         self.assertEqual(result, 19)
 

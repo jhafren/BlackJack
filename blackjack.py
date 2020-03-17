@@ -13,7 +13,7 @@ def print_game_state(player_hand, dealer_hand):
 
 def take_more():
     while True:
-        action = input("\nYour turn Do you want to take (t) or stay (s)? ")
+        action = input("\nYour turn. Do you want to take (t) or stay (s)? ")
         if action == "t":
             return True
         elif action == "s":
@@ -22,7 +22,7 @@ def take_more():
             print("Invalid choice.")
 
 def wait_for_input():
-        input("\nDealer turn. Press any key to continue..")
+    input("\nDealer's turn. Press any key to continue..")
 
 def determine_winner(player_sum, dealer_sum):
     if player_sum > MAX_VALUE:
@@ -42,11 +42,11 @@ def start_game():
     player_hand = Hand()
     dealer_hand = Hand()
 
-    player_hand.take(deck.draw_card())    
-    dealer_hand.take(deck.draw_card())    
-    player_hand.take(deck.draw_card())    
-    dealer_hand.take(deck.draw_card())    
-
+    player_hand.take(deck.draw_card())
+    dealer_hand.take(deck.draw_card())
+    player_hand.take(deck.draw_card())
+    dealer_hand.take(deck.draw_card())
+    
     player_turn = True
     while player_turn:
         print_game_state(player_hand, dealer_hand)
@@ -56,23 +56,23 @@ def start_game():
         else:
             player_turn = False
 
-        if player_hand.sum() > MAX_VALUE:
+        if player_hand.hand_sum() > MAX_VALUE:
             player_turn = False
 
-    dealer_turn = True 
+    dealer_turn = True
     while dealer_turn:
         print_game_state(player_hand, dealer_hand)
 
-        if (player_hand.sum() < MAX_VALUE and
-            dealer_hand.sum() < MAX_VALUE and 
-            dealer_hand.sum() <= player_hand.sum()):
+        if (player_hand.hand_sum() < MAX_VALUE and
+                dealer_hand.hand_sum() < MAX_VALUE and
+                dealer_hand.hand_sum() <= player_hand.hand_sum()):
 
             wait_for_input()
-            dealer_hand.take(deck.draw_card())   
+            dealer_hand.take(deck.draw_card())
         else:
             dealer_turn = False
-        
-    determine_winner(player_hand.sum(), dealer_hand.sum())
+    
+    determine_winner(player_hand.hand_sum(), dealer_hand.hand_sum())
 
 if __name__ == "__main__":
     start_game()
