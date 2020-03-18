@@ -40,7 +40,7 @@ def start_game():
     deck.shuffle()
     
     player_hand = Hand()
-    dealer_hand = Hand()
+    dealer_hand = Hand(last_card_face_down=True)
 
     player_hand.take(deck.draw_card())
     dealer_hand.take(deck.draw_card())
@@ -63,12 +63,15 @@ def start_game():
     while dealer_turn:
         print_game_state(player_hand, dealer_hand)
 
-        if (player_hand.hand_sum() < MAX_VALUE and
+        if (player_hand.hand_sum() <= MAX_VALUE and
                 dealer_hand.hand_sum() < MAX_VALUE and
                 dealer_hand.hand_sum() <= player_hand.hand_sum()):
 
             wait_for_input()
-            dealer_hand.take(deck.draw_card())
+            if dealer_hand.last_card_face_down:
+                dealer_hand.show_last_card()
+            else:
+                dealer_hand.take(deck.draw_card())
         else:
             dealer_turn = False
     

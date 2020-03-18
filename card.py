@@ -25,11 +25,31 @@ class Card:
         return "♠"
 
     def draw_card(self):
+        '''
+        Returns a string with the face of the card drawn, e.g.:
+         _ _ _
+        |A    |
+        |♣    |
+        |    ♣|
+        |    A|
+         ̅  ̅  ̅ 
+        '''
         return (" _ _ _  \n" +
             f"|{self.rank_char():<2}   | \n" +
             f"|{self.suit_char()}    | \n" +
             f"|    {self.suit_char()}| \n" +
             f"|   {self.rank_char():>2}| \n" +
+            " ̅ ̅ ̅  ")
+
+    def draw_card_face_down(self):
+        '''
+        Returns a string with the of the card drawn face down
+        '''
+        return (" _ _ _  \n" +
+            "|XXXXX| \n" +
+            "|XXXXX| \n" +
+            "|XXXXX| \n" +
+            "|XXXXX| \n" +
             " ̅ ̅ ̅  ")
 
     def __str__(self):   

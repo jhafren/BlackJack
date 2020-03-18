@@ -1,7 +1,14 @@
 class Hand:
 
-    def __init__(self):
+    def __init__(self, last_card_face_down = False):
         self.cards = []
+        self.last_card_face_down = last_card_face_down
+
+    def visible_cards(self):
+        if self.last_card_face_down:
+            return self.cards[:-1]
+
+        return self.cards
 
     def simple_sum(self):
         '''
@@ -9,7 +16,7 @@ class Hand:
         where aces are counted as 1.
         '''
         hand_sum = 0
-        for card in self.cards:
+        for card in self.visible_cards():
             hand_sum += card.black_jack_value()
 
         return hand_sum
@@ -21,7 +28,7 @@ class Hand:
         '''
         sums = [self.simple_sum()]
 
-        for card in self.cards:
+        for card in self.visible_cards():
             if card.is_ace():
                 sums.append(sums[-1] + 10)
 
@@ -44,13 +51,16 @@ class Hand:
 
     def draw_hand(self):
         '''
-        Returns a string of cards in the hand, where the cards in the
-        hand are drawn next to each other horisontally.
+        Returns a string of cards in the hand, where the cards in
+        the hand are drawn next to each other horisontally.
         '''
         drawn_card_rows = []
-        for card in self.cards:
-            split_rows = card.draw_card().split("\n")
-            drawn_card_rows.append(split_rows)
+        for index, card in enumerate(self.cards):
+            if self.last_card_face_down and index == len(self.cards)-1:
+                drawn_card = card.draw_card_face_down()
+            else:
+                drawn_card = card.draw_card()
+            drawn_card_rows.append(drawn_card.split("\n"))
 
         result = ""
         for row_ind in range(len(drawn_card_rows[0])):
@@ -58,8 +68,11 @@ class Hand:
                 result += drawn_card_rows[card_ind][row_ind]
 
             result += "\n"
-            
+
         return result
+
+    def show_last_card(self):
+        self.last_card_face_down = False
 
     def __str__(self):
         result = self.draw_hand()
