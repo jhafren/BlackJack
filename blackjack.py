@@ -46,7 +46,7 @@ def start_game():
     dealer_hand.take(deck.draw_card())
     player_hand.take(deck.draw_card())
     dealer_hand.take(deck.draw_card())
-    
+
     player_turn = True
     while player_turn:
         print_game_state(player_hand, dealer_hand)

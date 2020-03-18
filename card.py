@@ -4,6 +4,34 @@ class Card:
         self.rank = rank
         self.suit = suit
 
+    def rank_char(self):
+        if self.rank == 1:
+            return "A"
+        if self.rank == 11:
+            return "J"
+        if self.rank == 12:
+            return "Q"
+        if self.rank == 13:
+            return "K"
+        return f"{self.rank}"
+
+    def suit_char(self):
+        if self.suit =="hearts":
+            return "♥" 
+        if self.suit == "diamonds":
+            return "♦"
+        if self.suit == "clubs":
+            return "♣"
+        return "♠"
+
+    def draw_card(self):
+        return (" _ _ _  \n" +
+            f"|{self.rank_char():<2}   | \n" +
+            f"|{self.suit_char()}    | \n" +
+            f"|    {self.suit_char()}| \n" +
+            f"|   {self.rank_char():>2}| \n" +
+            " ̅ ̅ ̅  ")
+
     def __str__(self):   
         rank_str = self.rank
 

@@ -42,11 +42,27 @@ class Hand:
     def take(self, card):
         self.cards.append(card)
 
-    def __str__(self):
-        result = ""
+    def draw_hand(self):
+        '''
+        Returns a string of cards in the hand, where the cards in the
+        hand are drawn next to each other horisontally.
+        '''
+        drawn_card_rows = []
         for card in self.cards:
-            result += f"{card}\n"
+            split_rows = card.draw_card().split("\n")
+            drawn_card_rows.append(split_rows)
 
+        result = ""
+        for row_ind in range(len(drawn_card_rows[0])):
+            for card_ind in range(len(drawn_card_rows)):
+                result += drawn_card_rows[card_ind][row_ind]
+
+            result += "\n"
+            
+        return result
+
+    def __str__(self):
+        result = self.draw_hand()
         result += f"Sum {self.hand_sum()}"
         
         return result
