@@ -1,15 +1,21 @@
 from deck import Deck
 from hand import Hand
+import os
 
 MAX_VALUE = 21
 
+def clear_console():
+    os.system('cls' if os.name=='nt' else 'clear')
+
 def print_game_state(player_hand, dealer_hand):
-    print("\n")
+    clear_console()
+    print("BLACK JACK TABLE\n")
     print("Dealer:")
     print(dealer_hand)
     print("\n")
-    print("Player:")
+    print("You:")
     print(player_hand)
+    print("\n")
 
 def take_more():
     while True:
