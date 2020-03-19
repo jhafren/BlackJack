@@ -1,5 +1,6 @@
 from deck import Deck
 from hand import Hand
+from bankroll import Bankroll
 import os
 
 MAX_VALUE = 21
@@ -17,10 +18,37 @@ def print_game_state(player_hand, dealer_hand):
     print(player_hand)
     print("\n")
 
+def get_deposit_amount():
+    while True:
+        try:
+            amount = int(input("\nHow much would you like to add to your bankroll? "))
+            if amount > 0:
+                return amount
+            else:
+                print("The amount needs to be greater than 0.")    
+        except:
+            print("Invalid amount. Please enter an integer greater than 0.")
+
+def get_bet(bankroll):
+    while True:
+        try:
+            amount = int(input("\nHow much would you like to bet? "))
+            if amount > 0:
+                try:
+                    bankroll.withdraw(amount)
+                    return amount
+                except ValueError:
+                    print(f"Insufficient balance. {bankroll}.")
+            else:
+                print("The amount needs to be greater than 0.")    
+        except:
+            print("Invalid amount. Please enter an integer greater than 0.")
+
+
 def take_more():
     while True:
-        action = input("\nYour turn. Do you want to take (t) or stay (s)? ")
-        if action == "t":
+        action = input("\nYour turn. Do you want to hit (h) or stay (s)? ")
+        if action == "h":
             return True
         elif action == "s":
             return False
@@ -30,21 +58,21 @@ def take_more():
 def wait_for_input():
     input("\nDealer's turn. Press any key to continue..")
 
-def determine_winner(player_sum, dealer_sum):
+def does_player_win(player_sum, dealer_sum):
     if player_sum > MAX_VALUE:
         print("You BUST, you lose!")
+        return False
     elif dealer_sum > MAX_VALUE:
         print(f"You have {player_sum}, dealer BUST. You win!")
+        return True
     elif dealer_sum > player_sum:
         print(f"You have {player_sum}, dealer has {dealer_sum}. You lose!")
+        return False
     else:
         print(f"You have {player_sum}, dealer has {dealer_sum}. You win!")
+        return True
 
-def start_game():
-    print("Welcome to the Black Jack table!")
-    deck = Deck()
-    deck.shuffle()
-    
+def play_round(deck):
     player_hand = Hand()
     dealer_hand = Hand(last_card_face_down=True)
 
@@ -81,7 +109,29 @@ def start_game():
         else:
             dealer_turn = False
     
-    determine_winner(player_hand.hand_sum(), dealer_hand.hand_sum())
+    return does_player_win(player_hand.hand_sum(), dealer_hand.hand_sum())
+
+def start_game():
+    clear_console()
+    print("Welcome to the Black Jack table!")
+
+    deck = Deck()
+    deck.shuffle()
+
+    player_bankroll = Bankroll()
+    player_bankroll.deposit(get_deposit_amount())
+    
+    while True:
+        if not player_bankroll.has_balance():
+            print("Your bankroll is empty. Game over!")
+            break
+
+        print(f"\n{player_bankroll}")
+        bet = get_bet(player_bankroll)
+        player_wins = play_round(deck)
+
+        if player_wins:
+            player_bankroll.deposit(2*bet)
 
 if __name__ == "__main__":
     start_game()
