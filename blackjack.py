@@ -47,7 +47,7 @@ def get_bet(bankroll):
 
 def take_more():
     while True:
-        action = input("\nYour turn. Do you want to hit (h) or stay (s)? ").lower()
+        action = input("\nYour turn. Do you want to hit (h) or stay (s)? ")[0].lower()
         if action == "h":
             return True
         elif action == "s":
@@ -61,7 +61,7 @@ def wait_for_input():
 def play_topup_or_quit(bankroll):
     while True:
             print(f"\nYour bankroll balance is {bankroll.balance}.")
-            action = input("What do you want to do:\n - Play (p) another round\n - Add (a) value to bankroll\n - Quit (q) the table\n").lower()
+            action = input("What do you want to do:\n - Play (p) another round\n - Add (a) value to bankroll\n - Quit (q) the table\n")[0].lower()
             if action == "p":
                 return True
             elif action == "a":
@@ -75,7 +75,7 @@ def play_topup_or_quit(bankroll):
 def topup_or_quit(bankroll):
     while True:
             print("\nYour bankroll is empty.")
-            action = input("What do you want to do:\n - Add (a) value to bankroll\n - Quit (q) the table\n").lower()
+            action = input("What do you want to do:\n - Add (a) value to bankroll\n - Quit (q) the table\n")[0].lower()
             if action == "a":
                 bankroll.deposit(get_deposit_amount())
                 return play_topup_or_quit(bankroll)
