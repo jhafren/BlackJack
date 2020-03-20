@@ -8,15 +8,15 @@ MAX_VALUE = 21
 def clear_console():
     os.system('cls' if os.name=='nt' else 'clear')
 
-def print_game_state(player_hand, dealer_hand):
+def print_game_state(player_hand, dealer_hand, player_bet):
     clear_console()
     print("BLACK JACK TABLE\n")
     print("Dealer:")
     print(dealer_hand)
     print("\n")
-    print("You:")
+    print(f"You - bet {player_bet}:")
     print(player_hand)
-    print("\n")
+    print()
 
 def get_deposit_amount():
     while True:
@@ -32,7 +32,8 @@ def get_deposit_amount():
 def get_bet(bankroll):
     while True:
         try:
-            amount = int(input("\nHow much would you like to bet? "))
+            print(f"\n{bankroll}")
+            amount = int(input("How much would you like to bet? "))
             if amount > 0:
                 try:
                     bankroll.withdraw(amount)
@@ -44,10 +45,9 @@ def get_bet(bankroll):
         except:
             print("Invalid amount. Please enter an integer greater than 0.")
 
-
 def take_more():
     while True:
-        action = input("\nYour turn. Do you want to hit (h) or stay (s)? ")
+        action = input("\nYour turn. Do you want to hit (h) or stay (s)? ").lower()
         if action == "h":
             return True
         elif action == "s":
@@ -57,6 +57,38 @@ def take_more():
 
 def wait_for_input():
     input("\nDealer's turn. Press any key to continue..")
+
+def play_topup_or_quit(bankroll):
+    while True:
+            print(f"\nYour bankroll balance is {bankroll.balance}.")
+            action = input("What do you want to do:\n - Play (p) another round\n - Add (a) value to bankroll\n - Quit (q) the table\n").lower()
+            if action == "p":
+                return True
+            elif action == "a":
+                bankroll.deposit(get_deposit_amount())
+                return play_topup_or_quit(bankroll)
+            elif action == "q":
+                return False
+            else:
+                print("Invalid choice.")
+
+def topup_or_quit(bankroll):
+    while True:
+            print("\nYour bankroll is empty.")
+            action = input("What do you want to do:\n - Add (a) value to bankroll\n - Quit (q) the table\n").lower()
+            if action == "a":
+                bankroll.deposit(get_deposit_amount())
+                return play_topup_or_quit(bankroll)
+            elif action == "q":
+                return False
+            else:
+                print("Invalid choice.")
+
+def play_another_round(bankroll):
+    if bankroll.has_balance():
+        return play_topup_or_quit(bankroll)
+    else:
+        return topup_or_quit(bankroll)
 
 def does_player_win(player_sum, dealer_sum):
     if player_sum > MAX_VALUE:
@@ -72,7 +104,7 @@ def does_player_win(player_sum, dealer_sum):
         print(f"You have {player_sum}, dealer has {dealer_sum}. You win!")
         return True
 
-def play_round(deck):
+def play_round(deck, player_bet):
     player_hand = Hand()
     dealer_hand = Hand(last_card_face_down=True)
 
@@ -83,7 +115,7 @@ def play_round(deck):
 
     player_turn = True
     while player_turn:
-        print_game_state(player_hand, dealer_hand)
+        print_game_state(player_hand, dealer_hand, player_bet)
         
         if take_more():    
             player_hand.take(deck.draw_card())
@@ -95,7 +127,7 @@ def play_round(deck):
 
     dealer_turn = True
     while dealer_turn:
-        print_game_state(player_hand, dealer_hand)
+        print_game_state(player_hand, dealer_hand, player_bet)
 
         if (player_hand.hand_sum() <= MAX_VALUE and
                 dealer_hand.hand_sum() < MAX_VALUE and
@@ -122,16 +154,17 @@ def start_game():
     player_bankroll.deposit(get_deposit_amount())
     
     while True:
-        if not player_bankroll.has_balance():
-            print("Your bankroll is empty. Game over!")
-            break
-
-        print(f"\n{player_bankroll}")
         bet = get_bet(player_bankroll)
-        player_wins = play_round(deck)
+        player_wins = play_round(deck, bet)
 
         if player_wins:
             player_bankroll.deposit(2*bet)
+
+        if not play_another_round(player_bankroll):
+            break
+
+    print(f"You decided to leave the table with a bankroll of {player_bankroll.balance}.")
+    print("Thank you for playing!")
 
 if __name__ == "__main__":
     start_game()
