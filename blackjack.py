@@ -1,12 +1,12 @@
+import os
 from deck import Deck
 from hand import Hand
 from bankroll import Bankroll
-import os
 
 MAX_VALUE = 21
 
 def clear_console():
-    os.system('cls' if os.name=='nt' else 'clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_game_state(player_hand, dealer_hand, player_bet):
     clear_console()
@@ -60,29 +60,36 @@ def wait_for_input():
 
 def play_topup_or_quit(bankroll):
     while True:
-            print(f"\nYour bankroll balance is {bankroll.balance}.")
-            action = input("What do you want to do:\n - Play (p) another round\n - Add (a) value to bankroll\n - Quit (q) the table\n")[0].lower()
-            if action == "p":
-                return True
-            elif action == "a":
-                bankroll.deposit(get_deposit_amount())
-                return play_topup_or_quit(bankroll)
-            elif action == "q":
-                return False
-            else:
-                print("Invalid choice.")
+        print(f"\nYour bankroll balance is {bankroll.balance}.")
+        options_str = ("What do you want to do:\n" +
+                       " - Play (p) another round\n" +
+                       " - Add (a) value to bankroll\n" +
+                       " - Quit (q) the table\n")
+        action = input(options_str)[0].lower()
+        if action == "p":
+            return True
+        elif action == "a":
+            bankroll.deposit(get_deposit_amount())
+            return play_topup_or_quit(bankroll)
+        elif action == "q":
+            return False
+        else:
+            print("Invalid choice.")
 
 def topup_or_quit(bankroll):
     while True:
-            print("\nYour bankroll is empty.")
-            action = input("What do you want to do:\n - Add (a) value to bankroll\n - Quit (q) the table\n")[0].lower()
-            if action == "a":
-                bankroll.deposit(get_deposit_amount())
-                return play_topup_or_quit(bankroll)
-            elif action == "q":
-                return False
-            else:
-                print("Invalid choice.")
+        print("\nYour bankroll is empty.")
+        options_str = ("What do you want to do:\n" +
+                       " - Add (a) value to bankroll\n" +
+                       " - Quit (q) the table\n")
+        action = input(options_str)[0].lower()
+        if action == "a":
+            bankroll.deposit(get_deposit_amount())
+            return play_topup_or_quit(bankroll)
+        elif action == "q":
+            return False
+        else:
+            print("Invalid choice.")
 
 def play_another_round(bankroll):
     if bankroll.has_balance():
